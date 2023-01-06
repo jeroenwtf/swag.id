@@ -17,8 +17,8 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center text-white bg-gradient-to-br from-purple-600 to-rose-800">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-          <h1 className="text-5xl sm:text-8xl font-extrabold tracking-tight text-white">SWAG.id</h1>
-          <p>This is the temporary home page.</p>
+          <h1 className="text-5xl sm:text-8xl font-extrabold tracking-tight text-white">SWAG<span className="text-purple-300">.id</span></h1>
+          <p>This is the temporary home page. We are working on it.</p>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
