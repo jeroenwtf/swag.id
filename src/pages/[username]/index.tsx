@@ -1,9 +1,14 @@
+import type { GetServerSideProps } from "next";
 import Image from 'next/image';
 import { notFound } from 'next/navigation'
 
 import { api } from "../../utils/api";
 
-export default function UsernamePage({ username }) {
+type Props = {
+  username: string,
+}
+
+const UsernamePage = ({ username }: Props) => {
   const user = api.user.getByUsername.useQuery({ username });
 
   if (user.isLoading) {
@@ -17,7 +22,9 @@ export default function UsernamePage({ username }) {
   return <div>
     <div className="p-10 flex justify-center min-h-screen border-gray-100">
       <div className="flex max-w-md w-full text-center items-center flex-col gap-4">
-        <Image src={user.data.image} alt={`Avatar of ${displayName}`} width={96} height={96} className="rounded-full w-24 h-24" />
+        {user.data.image &&
+          <Image src={user.data.image} alt={`Avatar of ${displayName}`} width={96} height={96} className="rounded-full w-24 h-24" />
+        }
         <div>
           <h1 className="text-xl font-bold">{displayName}</h1>
           {user.data.bio &&
@@ -29,10 +36,12 @@ export default function UsernamePage({ username }) {
   </div >
 }
 
-export function getServerSideProps(ctx) {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
-      username: ctx.query.username,
+      username: query.username,
     }
   }
 }
+
+export default UsernamePage;
