@@ -1,14 +1,19 @@
 import type { GetServerSideProps } from "next";
-import Image from 'next/image';
+import UserInfo from '@/components/UserInfo'
 import { notFound } from 'next/navigation'
 
 import { api } from "../../utils/api";
+import { useState } from "react";
+import UserTopBar from "@/components/UserTopBar";
+import { useSession } from "next-auth/react";
 
 type Props = {
   username: string,
 }
 
 const UsernamePage = ({ username }: Props) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const { data: sessionData } = useSession();
   const user = api.user.getByUsername.useQuery({ username });
 
   if (user.isLoading) {
@@ -17,23 +22,22 @@ const UsernamePage = ({ username }: Props) => {
     notFound()
   }
 
-  const displayName = user.data.name || username
+  const showUserTopBar = sessionData && sessionData.user?.id === user.data.id
 
-  return <div>
-    <div className="p-10 flex justify-center min-h-screen border-gray-100">
-      <div className="flex max-w-md w-full text-center items-center flex-col gap-4">
-        {user.data.image &&
-          <Image src={user.data.image} alt={`Avatar of ${displayName}`} width={96} height={96} className="rounded-full w-24 h-24" />
-        }
-        <div>
-          <h1 className="text-xl font-bold">{displayName}</h1>
-          {user.data.bio &&
-            <p>{user.data.bio}</p>
-          }
-        </div>
+  function handleEditProfile() {
+    setIsEditing(s => !s)
+  }
+
+  return (
+    <div>
+      {showUserTopBar &&
+        <UserTopBar isEditing={isEditing} handleEditProfile={handleEditProfile} />
+      }
+      <div className="p-10 flex justify-center min-h-screen border-gray-100">
+        <UserInfo user={user} username={username} editMode={isEditing} />
       </div>
     </div>
-  </div >
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
