@@ -1,7 +1,20 @@
 import clsx from 'clsx'
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 
-const Input = forwardRef((props, ref) => {
+// TODO: this
+type Props = {
+  wrapperClassName?: string,
+  placeholder: string,
+  label: string,
+  type: string,
+  errors?: {
+    message?: string,
+  },
+  name: string,
+  required: boolean,
+}
+
+const Input = forwardRef<HTMLInputElement, any>((props, ref) => {
   const {
     wrapperClassName = '',
     placeholder = '',
@@ -14,15 +27,14 @@ const Input = forwardRef((props, ref) => {
   } = props;
 
   const inputWrapperClasses = clsx('flex flex-col gap-1', wrapperClassName)
+  const inputClasses = clsx(
+    'border text-left rounded transition duration-150 ease-in-out',
+    errors ? 'focus-within:border-red-400 border-red-300' : 'focus-within:border-gray-400 border-gray-200'
+  )
 
   return (
     <div className={inputWrapperClasses}>
-      <div
-        className={`border border-2 text-left rounded transition duration-150 ease-in-out ${errors
-          ? 'focus-within:border-red-400 border-red-300'
-          : 'focus-within:border-gray-400 border-gray-200'
-          }`}
-      >
+      <div className={inputClasses}>
         <label
           htmlFor={name}
           className='text-xs text-primary placeholder-gray-gray4 px-2 pt-1.5'

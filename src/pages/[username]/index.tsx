@@ -14,13 +14,16 @@ type Props = {
 const UsernamePage = ({ username }: Props) => {
   const [isEditing, setIsEditing] = useState(false)
   const { data: sessionData } = useSession();
+  // TODO: Move this to getServerSideProps to avoid all the TS crap
   const user = api.user.getByUsername.useQuery({ username });
 
   if (user.isLoading) {
     return <div>Loading</div>
-  } else if (!user.data) {
+  } else if (!user || !user.data) {
     notFound()
   }
+
+  const { name, bio, image } = user.data
 
   const showUserTopBar = sessionData && sessionData.user?.id === user.data.id
 
@@ -34,7 +37,9 @@ const UsernamePage = ({ username }: Props) => {
         <UserTopBar isEditing={isEditing} handleEditProfile={handleEditProfile} />
       }
       <div className="p-10 flex justify-center min-h-screen border-gray-100">
-        <UserInfo user={user} username={username} editMode={isEditing} />
+        {name && bio && image &&
+          <UserInfo name={name} bio={bio} image={image} username={username} editMode={isEditing} />
+        }
       </div>
     </div>
   )

@@ -1,9 +1,7 @@
 import Image from 'next/image';
 import Input from '@/components/Input'
-import { useState } from 'react';
 import { api } from '@/utils/api';
 import { z } from 'zod';
-import { ZodError } from 'zod';
 import { rules } from '@/server/api/routers/user/validation';
 
 import type { SubmitHandler } from "react-hook-form";
@@ -17,9 +15,16 @@ const validationSchema = z.object({
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export default function UserInfo({ user, username, editMode }) {
+type Props = {
+  name?: string,
+  bio?: string,
+  image?: string,
+  username: string,
+  editMode: boolean,
+}
+
+export default function UserInfo({ name, bio, image, username, editMode }: Props) {
   const meMutation = api.user.me.useMutation()
-  const { name, bio, image } = user.data
   const displayName = name || username
 
   const {
