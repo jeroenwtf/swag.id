@@ -1,10 +1,10 @@
 import { z } from "zod";
-
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { rules } from './validation';
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../../trpc";
 
 export const userRouter = createTRPCRouter({
   getByUsername: publicProcedure
-    .input(z.object({ username: z.string() }))
+    .input(z.object({ username: rules.username }))
     .query(({ ctx, input }) => {
       const { username } = input
       return ctx.prisma.user.findUnique({
@@ -12,6 +12,24 @@ export const userRouter = createTRPCRouter({
           username
         }
       });
+    }),
+
+  me: protectedProcedure
+    .input(z.object({
+      name: rules.name,
+      bio: rules.bio,
+    }))
+    .mutation(({ ctx, input }) => {
+      const { name, bio } = input
+      return ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          name,
+          bio,
+        },
+      })
     }),
 
   hello: publicProcedure
