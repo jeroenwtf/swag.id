@@ -32,6 +32,22 @@ export const userRouter = createTRPCRouter({
       })
     }),
 
+  avatar: protectedProcedure
+    .input(z.object({
+      image: rules.image,
+    }))
+    .mutation(({ ctx, input }) => {
+      const { image } = input
+      return ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          image,
+        },
+      })
+    }),
+
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
