@@ -14,7 +14,7 @@ type Props = {
   newTab?: boolean;
   icon?: string;
   color?: keyof typeof COLORS;
-  type?: string;
+  type?: "button" | "submit" | "reset" | undefined;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler;
 };
