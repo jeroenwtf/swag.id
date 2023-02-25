@@ -29,7 +29,8 @@ type Props = {
 export default function UserInfo({ name, bio, image, username, editMode }: Props) {
   const meMutation = api.user.me.useMutation()
   const displayName = name || username
-  const submitRef = useRef()
+  const submitRef = useRef<HTMLButtonElement>(null)
+  const submitRefElement = submitRef.current
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const {
@@ -60,7 +61,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
         isOpen={modalIsOpen}
         actions={[
           <Button key="cancelButton" onClick={() => setModalIsOpen(false)}>Cancel</Button>,
-          <Button key="submitButton" color="pink" onClick={() => submitRef.current.click()}>Update profile</Button>
+          <Button key="submitButton" color="pink" onClick={() => submitRefElement && submitRefElement.click()}>Update profile</Button>
         ]}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
