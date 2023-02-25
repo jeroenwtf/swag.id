@@ -59,10 +59,6 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
         title="Edit your profile"
         description="Use the following form to update your profile information"
         isOpen={modalIsOpen}
-        actions={[
-          <Button key="cancelButton" onClick={() => setModalIsOpen(false)}>Cancel</Button>,
-          <Button key="submitButton" color="pink" onClick={() => submitRefElement && submitRefElement.click()}>Update profile</Button>
-        ]}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <div>TODO: Avatar field</div>
@@ -80,7 +76,11 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
             errors={errors.bio}
             {...register('bio')}
           />
-          <button ref={submitRef} type="submit" className='hidden' />
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button onClick={() => setModalIsOpen(false)}>Cancel</Button>
+            <Button onClick={() => setModalIsOpen(false)} color="pink" type="submit">Update profile</Button>
+          </div>
         </form>
       </Modal>
       <div>
@@ -89,7 +89,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
           <p>{bio}</p>
         }
       </div>
-      <Button onClick={() => setModalIsOpen(true)}>Edit profile info</Button>
+      <Button size='small' onClick={() => setModalIsOpen(true)}>Edit profile info</Button>
     </div>
 
   )

@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import clsx from 'clsx'
 
-export default function Modal({ children, title, description, size = 'medium', actions = [], isOpen = false }) {
+export default function Modal({ children, title, description, size = 'medium', isOpen = false }) {
   let [modalIsOpen, setModalIsOpen] = useState(isOpen)
 
   useEffect(() => {
     setModalIsOpen(isOpen)
-    console.log('modal', isOpen)
   }, [isOpen])
 
   const modalClasses = clsx(
@@ -26,12 +25,6 @@ export default function Modal({ children, title, description, size = 'medium', a
           <Dialog.Description className="text-gray-500 mb-4">{description}</Dialog.Description>
 
           <div>{children}</div>
-
-          {actions &&
-            <div className="flex justify-end gap-4 mt-6">
-              {actions.map(action => action)}
-            </div>
-          }
         </Dialog.Panel>
       </div>
     </Dialog>

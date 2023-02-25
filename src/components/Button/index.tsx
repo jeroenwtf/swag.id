@@ -9,11 +9,18 @@ const COLORS = {
   red: "bg-red-100 text-red-500",
 };
 
+const SIZES = {
+  small: "px-3 py-2 text-xs",
+  medium: "px-5 py-3 text-sm",
+  large: "px-7 py-5",
+}
+
 type Props = {
   url?: string;
   newTab?: boolean;
   icon?: string;
   color?: keyof typeof COLORS;
+  size?: keyof typeof SIZES;
   type?: "button" | "submit" | "reset" | undefined;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler;
@@ -24,13 +31,15 @@ export default function Button({
   newTab,
   icon,
   color,
+  size,
   type = 'button',
   children,
   onClick,
 }: Props) {
   const buttonClasses = clsx(
-    "flex cursor-pointer items-center justify-center gap-1.5 rounded px-5 py-3 text-sm font-semibold",
-    color && Object.hasOwn(COLORS, color) ? COLORS[color] : COLORS.gray
+    "flex cursor-pointer items-center justify-center gap-1.5 rounded font-semibold",
+    color && Object.hasOwn(COLORS, color) ? COLORS[color] : COLORS.gray,
+    size && Object.hasOwn(SIZES, size) ? SIZES[size] : SIZES.medium,
   );
 
   function openTab() {
