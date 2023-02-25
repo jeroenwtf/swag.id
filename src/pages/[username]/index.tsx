@@ -34,7 +34,7 @@ const UsernamePage = ({ username }: Props) => {
   return (
     <div>
       {showUserTopBar &&
-        <UserTopBar isEditing={isEditing} handleEditProfile={handleEditProfile} />
+        <UserTopBar handleEditProfile={handleEditProfile} />
       }
       <div className="p-10 flex justify-center min-h-screen border-gray-100">
         {name && bio && image &&
