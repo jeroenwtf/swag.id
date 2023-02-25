@@ -29,8 +29,6 @@ type Props = {
 export default function UserInfo({ name, bio, image, username, editMode }: Props) {
   const meMutation = api.user.me.useMutation()
   const displayName = name || username
-  const submitRef = useRef<HTMLButtonElement>(null)
-  const submitRefElement = submitRef.current
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const {
