@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Input from '@/components/Input'
+import Modal from '@/components/Modal'
 import { api } from '@/utils/api';
 import { z } from 'zod';
 import { rules } from '@/server/api/routers/user/validation';
@@ -7,6 +8,8 @@ import { rules } from '@/server/api/routers/user/validation';
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Button from '../Button';
+import { useEffect, useRef, useState } from 'react';
 
 const validationSchema = z.object({
   name: rules.name,
@@ -26,6 +29,7 @@ type Props = {
 export default function UserInfo({ name, bio, image, username, editMode }: Props) {
   const meMutation = api.user.me.useMutation()
   const displayName = name || username
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const {
     register,
@@ -48,8 +52,14 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
       {image &&
         <Image src={image} alt={`Avatar of ${displayName}`} width={96} height={96} className="rounded-full w-24 h-24" />
       }
-      {editMode ? (
+      {/* TODO: Make the modal a UI component */}
+      <Modal
+        title="Edit your profile"
+        description="Use the following form to update your profile information"
+        isOpen={modalIsOpen}
+      >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+          <div>TODO: Avatar field</div>
           <Input
             label="Name"
             type="text"
@@ -64,16 +74,20 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
             errors={errors.bio}
             {...register('bio')}
           />
-          <button className="bg-gradient-to-br from-rose-700 to-red-400 text-white font-semibold px-4 py-3 rounded" type="submit">Update profile</button>
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button onClick={() => setModalIsOpen(false)}>Cancel</Button>
+            <Button onClick={() => setModalIsOpen(false)} color="pink" type="submit">Update profile</Button>
+          </div>
         </form>
-      ) : (
-        <div>
-          <h1 className="text-xl font-bold">{displayName}</h1>
-          {bio &&
-            <p>{bio}</p>
-          }
-        </div>
-      )}
+      </Modal>
+      <div>
+        <h1 className="text-xl font-bold">{displayName}</h1>
+        {bio &&
+          <p>{bio}</p>
+        }
+      </div>
+      <Button size='small' onClick={() => setModalIsOpen(true)}>Edit profile info</Button>
     </div>
 
   )

@@ -14,6 +14,10 @@ const config = {
         protocol: "https",
         hostname: "**.googleusercontent.com",
       },
+      {
+        protocol: 'http',
+        hostname: 'res.cloudinary.com',
+      },
     ],
   },
   swcMinify: true,
