@@ -3,6 +3,7 @@ import UserInfo from '@/components/UserInfo'
 import { notFound } from 'next/navigation'
 
 import { api } from "../../utils/api";
+
 import UserTopBar from "@/components/UserTopBar";
 import { useSession } from "next-auth/react";
 
