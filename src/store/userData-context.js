@@ -1,22 +1,18 @@
-import React, { useState } from 'react'
+import { createContext, useState } from 'react'
 
-const UserDataContext = React.createContext({
+const UserDataContext = createContext({
     modalIsShown: false,
-    onShowModal:()=>{}
+    setModalIsShown: (value) => undefined
 })
 
 export const UserDataContextProvider = (props) => {
     const [modalIsShown, setModalIsShown] = useState(false)
-    
-    const onModalToggle = () => {
-        setModalIsShown(!modalIsShown)
-    }
 
     return (
         <UserDataContext.Provider
             value={{
-                modalIsShown: modalIsShown,
-                onShowModal: onModalToggle
+                modalIsShown,
+                setModalIsShown,
             }}>
             {props.children}
         </UserDataContext.Provider>

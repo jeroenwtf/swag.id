@@ -9,7 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from '../Button';
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useContext } from 'react';
 
 import UserDataContext from '@/store/userData-context'
 
@@ -25,13 +25,11 @@ type Props = {
   bio?: string,
   image?: string,
   username: string,
-  editMode: boolean,
 }
 
-export default function UserInfo({ name, bio, image, username, editMode }: Props) {
+export default function UserInfo({ name, bio, image, username }: Props) {
   const meMutation = api.user.me.useMutation()
   const displayName = name || username
-  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const userCtx = useContext(UserDataContext)
   
@@ -61,7 +59,6 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
       <Modal
         title="Edit your profile"
         description="Use the following form to update your profile information"
-        isOpen={userCtx.modalIsShown}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <div>TODO: Avatar field</div>
@@ -81,8 +78,8 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
           />
 
           <div className="flex justify-end gap-2 mt-6">
-            <Button onClick={() => userCtx.onShowModal()}>Cancel</Button>
-            <Button onClick={() => userCtx.onShowModal()} color="pink" type="submit">Update profile</Button>
+            <Button onClick={() => userCtx.setModalIsShown(false)}>Cancel</Button>
+            <Button onClick={() => userCtx.setModalIsShown(false)} color="pink" type="submit">Update profile</Button>
           </div>
         </form>
       </Modal>
@@ -92,7 +89,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
           <p>{bio}</p>
         }
       </div>
-      <Button size='small' onClick={() => {userCtx.onShowModal() }}>Edit profile info</Button>
+      <Button size='small' onClick={() => {userCtx.setModalIsShown(true) }}>Edit profile info</Button>
     </div>
 
   )
