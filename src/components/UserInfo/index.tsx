@@ -9,7 +9,9 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from '../Button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+
+import UserDataContext from '@/store/userData-context'
 
 const validationSchema = z.object({
   name: rules.name,
@@ -31,6 +33,8 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
   const displayName = name || username
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
+  const userCtx = useContext(UserDataContext)
+  
   const {
     register,
     handleSubmit,
@@ -47,6 +51,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
     meMutation.mutate(data)
   }
 
+
   return (
     <div className="flex max-w-md w-full text-center items-center flex-col gap-4">
       {image &&
@@ -56,7 +61,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
       <Modal
         title="Edit your profile"
         description="Use the following form to update your profile information"
-        isOpen={modalIsOpen}
+        isOpen={userCtx.modalIsShown}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <div>TODO: Avatar field</div>
@@ -76,8 +81,8 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
           />
 
           <div className="flex justify-end gap-2 mt-6">
-            <Button onClick={() => setModalIsOpen(false)}>Cancel</Button>
-            <Button onClick={() => setModalIsOpen(false)} color="pink" type="submit">Update profile</Button>
+            <Button onClick={() => userCtx.onShowModal()}>Cancel</Button>
+            <Button onClick={() => userCtx.onShowModal()} color="pink" type="submit">Update profile</Button>
           </div>
         </form>
       </Modal>
@@ -87,7 +92,7 @@ export default function UserInfo({ name, bio, image, username, editMode }: Props
           <p>{bio}</p>
         }
       </div>
-      <Button size='small' onClick={() => setModalIsOpen(true)}>Edit profile info</Button>
+      <Button size='small' onClick={() => {userCtx.onShowModal() }}>Edit profile info</Button>
     </div>
 
   )
