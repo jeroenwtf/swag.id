@@ -23,7 +23,6 @@ export const UserDataContextProvider = ({ children }) => {
   if (user.data) {
     const { id, name, bio, username, image } = user.data;
     userData = { modalIsShown, setModalIsShown, id, name, bio, username, image }
-    console.log(userData)
   }
 
   return (
