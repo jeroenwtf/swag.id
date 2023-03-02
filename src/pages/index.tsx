@@ -1,12 +1,10 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useContext } from 'react';
-
+import { useUserContext } from '@/store/user-context';
 
 import { api } from "../utils/api";
 
-import UserDataContext from '@/store/userData-context'
 import Link from 'next/link';
 
 const Home: NextPage = () => {
@@ -40,7 +38,7 @@ export default Home;
 const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
-  const{name, username}=useContext(UserDataContext)
+  const { name, username } = useUserContext()
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
     undefined, // no input
