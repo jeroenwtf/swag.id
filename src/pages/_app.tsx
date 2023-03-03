@@ -1,7 +1,7 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { UserDataContextProvider } from '../store/userData-context'
+import { UserContextProvider } from '@/store/user-context'
 
 import { api } from "../utils/api";
 
@@ -13,9 +13,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <UserDataContextProvider>
+      <UserContextProvider>
         <Component {...pageProps} />
-      </UserDataContextProvider>
+      </UserContextProvider>
     </SessionProvider>
   );
 };

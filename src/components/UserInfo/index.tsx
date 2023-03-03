@@ -9,9 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from '../Button';
-import { useContext } from 'react';
-
-import UserDataContext from '@/store/userData-context'
+import { useUserContext } from '@/store/user-context'
 
 const validationSchema = z.object({
   name: rules.name,
@@ -30,9 +28,8 @@ type Props = {
 export default function UserInfo({ name, bio, image, username }: Props) {
   const meMutation = api.user.me.useMutation()
   const displayName = name || username
+  const { modalIsShown, setModalIsShown } = useUserContext()
 
-  const userCtx = useContext(UserDataContext)
-  
   const {
     register,
     handleSubmit,
@@ -49,7 +46,6 @@ export default function UserInfo({ name, bio, image, username }: Props) {
     meMutation.mutate(data)
   }
 
-
   return (
     <div className="flex max-w-md w-full text-center items-center flex-col gap-4">
       {image &&
@@ -57,8 +53,10 @@ export default function UserInfo({ name, bio, image, username }: Props) {
       }
       {/* TODO: Make the modal a UI component */}
       <Modal
+        open={modalIsShown}
         title="Edit your profile"
         description="Use the following form to update your profile information"
+        onClose={() => setModalIsShown(false)}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
           <div>TODO: Avatar field</div>
@@ -78,8 +76,8 @@ export default function UserInfo({ name, bio, image, username }: Props) {
           />
 
           <div className="flex justify-end gap-2 mt-6">
-            <Button onClick={() => userCtx.setModalIsShown(false)}>Cancel</Button>
-            <Button onClick={() => userCtx.setModalIsShown(false)} color="pink" type="submit">Update profile</Button>
+            <Button onClick={() => setModalIsShown(false)}>Cancel</Button>
+            <Button onClick={() => setModalIsShown(false)} color="pink" type="submit">Update profile</Button>
           </div>
         </form>
       </Modal>
@@ -89,7 +87,7 @@ export default function UserInfo({ name, bio, image, username }: Props) {
           <p>{bio}</p>
         }
       </div>
-      <Button size='small' onClick={() => {userCtx.setModalIsShown(true) }}>Edit profile info</Button>
+      <Button size='small' onClick={() => { setModalIsShown(true) }}>Edit profile info</Button>
     </div>
 
   )

@@ -1,11 +1,7 @@
-import { useContext } from 'react'
 import { Dialog } from '@headlessui/react'
 import clsx from 'clsx'
-import UserDataContext from '@/store/userData-context'
 
-export default function Modal({ children, title, description, size = 'medium' }) {
-  const { modalIsShown, setModalIsShown } = useContext(UserDataContext)
-
+export default function Modal({ children, open = false, title, description, size = 'medium', onClose }) {
   const modalClasses = clsx(
     'w-full max-w-sm rounded bg-white p-5',
     size === 'small' && 'max-w-md',
@@ -14,7 +10,7 @@ export default function Modal({ children, title, description, size = 'medium' })
   )
 
   return (
-    <Dialog open={modalIsShown} onClose={() => setModalIsShown(false)} className="relative z-50">
+    <Dialog open={open} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-3">
         <Dialog.Panel className={modalClasses}>
