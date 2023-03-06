@@ -1,5 +1,8 @@
 import clsx from "clsx";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+
 const COLORS = {
   blue: "bg-blue-100 text-blue-500",
   gray: "bg-gray-200 text-gray-600",
@@ -22,6 +25,7 @@ type Props = {
   color?: keyof typeof COLORS;
   size?: keyof typeof SIZES;
   type?: "button" | "submit" | "reset" | undefined;
+  isLoading?: boolean;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler;
 };
@@ -33,14 +37,20 @@ export default function Button({
   color,
   size,
   type = 'button',
+  isLoading,
   children,
   onClick,
 }: Props) {
   const buttonClasses = clsx(
-    "flex cursor-pointer items-center justify-center gap-1.5 rounded font-semibold",
+    "flex cursor-pointer items-center justify-center gap-1.5 rounded font-semibold relative disabled:opacity-70 disabled:cursor-not-allowed",
     color && Object.hasOwn(COLORS, color) ? COLORS[color] : COLORS.gray,
     size && Object.hasOwn(SIZES, size) ? SIZES[size] : SIZES.medium,
   );
+  const textClasses = clsx(
+    'whitespace-nowrap',
+    isLoading && 'invisible',
+  )
+  const loadingIconWrapperClasses = 'absolute inset-0 flex justify-center items-center'
 
   function openTab() {
     url && newTab && window.open(url, "_blank")?.focus();
@@ -48,9 +58,10 @@ export default function Button({
   }
 
   return (
-    <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type}>
+    <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type} disabled={isLoading}>
       {/* icon && <HeroIcon icon={icon} /> */}
-      {children && <span className="whitespace-nowrap">{children}</span>}
+      {isLoading && <div className={loadingIconWrapperClasses}><FontAwesomeIcon icon={faCircleNotch} className="fa-spin" /></div>}
+      {children && <span className={textClasses}>{children}</span>}
     </button>
   );
 }
