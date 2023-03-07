@@ -6,6 +6,7 @@ import { api } from "../../utils/api";
 
 import UserTopBar from "@/components/UserTopBar";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type Props = {
   username: string,
@@ -32,12 +33,13 @@ const UsernamePage = ({ username }: Props) => {
         <UserTopBar />
       }
       <div className="p-10 flex flex-col gap-6 items-center min-h-screen border-gray-100">
-        {name && bio && image &&
-          <UserInfo name={name} bio={bio} image={image} username={username} />
-        }
+        <UserInfo name={name} bio={bio} image={image} username={username} />
 
         <div>
           Links here
+        </div>
+        <div className="text-center opacity-40">
+          <Link href="/" className="font-bold">SWAG<span className="opacity-60">.id</span></Link>
         </div>
       </div>
     </div>

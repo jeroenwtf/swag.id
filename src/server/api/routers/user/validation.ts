@@ -4,7 +4,7 @@ export const rules = {
   id: z.string().trim(),
   name: z.string().trim().max(30, { message: 'The name needs to be 30 or fewer characters long.' }),
   bio: z.string().trim().max(160, { message: 'The bio needs to be 160 or fewer characters long.' }),
-  username: z.string(),
+  username: z.string().trim().min(1, {message: 'A username is required.'}),
   image: z.string().trim(),
 }
 
