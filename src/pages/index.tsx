@@ -84,7 +84,7 @@ const AuthShowcase: React.FC = () => {
         {!userData.username && (
           <div className="bg-black/10 rounded-lg px-6 py-4">
             <h2 className="text-lg font-semibold">Wait, you need a username!</h2>
-            <p className="mb-3">It will be used to create your URL. Don't worry, you can change it any time.</p>
+            <p className="mb-3">It will be used to create your URL. Don&apos;t worry, you can change it any time.</p>
             <form onSubmit={handleSubmit(onSubmit)}>
               <fieldset disabled={isLoading} className="flex flex-col gap-3">
                 <Input
