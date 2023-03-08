@@ -1,32 +1,43 @@
 import { api } from '@/utils/api';
 import { useSession } from 'next-auth/react';
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const UserContext = createContext({
   modalIsShown: false,
   setModalIsShown: (value) => undefined,
-  id: '',
-  name: '',
-  bio: '',
-  username: '',
-  image: ''
+  data: {
+    id: '',
+    name: '',
+    bio: '',
+    email: '',
+    username: '',
+    image: '',
+  },
+  isLoading: false,
 })
 
 export const UserContextProvider = ({ children }) => {
   const [modalIsShown, setModalIsShown] = useState(false)
-  const { data } = useSession()
-  const userId = data && data.user ? data.user.id : ''
-  let userData = {}
+  const { data: sessionData } = useSession()
+  const userId = sessionData && sessionData.user ? sessionData.user.id : ''
+  let contextData = {
+    modalIsShown,
+    setModalIsShown,
+    isLoading: true,
+  }
 
-  const user = api.user.getById.useQuery({ id: userId });
+  const { isLoading, data: userData } = api.user.getById.useQuery({ id: userId });
 
-  if (user.data) {
-    const { id, name, bio, username, image } = user.data;
-    userData = { modalIsShown, setModalIsShown, id, name, bio, username, image }
+  if (!isLoading) {
+    contextData = {
+      ...contextData,
+      data: userData,
+      isLoading,
+    }
   }
 
   return (
-    <UserContext.Provider value={userData}>
+    <UserContext.Provider value={contextData}>
       {children}
     </UserContext.Provider>
   )

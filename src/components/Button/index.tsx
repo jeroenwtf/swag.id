@@ -10,6 +10,7 @@ const COLORS = {
   orange: "bg-orange-100 text-orange-500",
   pink: "bg-pink-100 text-pink-500",
   red: "bg-red-100 text-red-500",
+  darkPink: "bg-pink-600 text-white",
 };
 
 const SIZES = {
@@ -60,7 +61,7 @@ export default function Button({
   return (
     <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type} disabled={isLoading}>
       {/* icon && <HeroIcon icon={icon} /> */}
-      {isLoading && <div className={loadingIconWrapperClasses}><FontAwesomeIcon icon={faCircleNotch} className="fa-spin" /></div>}
+      {isLoading && <div className={loadingIconWrapperClasses}><FontAwesomeIcon icon={faCircleNotch} className="animate-spin w-5 h-5" /></div>}
       {children && <span className={textClasses}>{children}</span>}
     </button>
   );
