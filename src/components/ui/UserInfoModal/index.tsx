@@ -42,9 +42,9 @@ export default function UserInfoModal() {
     formState: { errors },
   } = useForm<ValidationSchema>({
     defaultValues: {
-      name: userData.name || '',
-      bio: userData.bio || '',
-      username: userData.username,
+      name: userData?.name || '',
+      bio: userData?.bio || '',
+      username: userData?.username,
     },
     resolver: zodResolver(validationSchema),
   });
@@ -118,7 +118,7 @@ export default function UserInfoModal() {
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </div>
               </div>
-              <Avatar src={imageSrc || userData.image} alt="Your current avatar" />
+              <Avatar src={imageSrc || userData?.image} alt="Your current avatar" />
               <input ref={avatarInputRef} type="file" name="avatar" className='hidden' />
             </label>
 

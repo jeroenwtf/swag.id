@@ -57,6 +57,7 @@ model User {
     emailVerified DateTime?
     image         String?
     bio           String?
+    links         Link[]
     accounts      Account[]
     sessions      Session[]
 }
@@ -67,4 +68,13 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Link {
+  id       String @id @default(cuid())
+  userId   String
+  text     String
+  href     String
+  position Int
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
