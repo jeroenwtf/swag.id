@@ -98,7 +98,6 @@ export default function UserInfoModal() {
     }
   }
 
-
   return (
     <Modal
       open={modalIsShown}
