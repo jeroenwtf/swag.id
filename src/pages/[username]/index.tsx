@@ -42,7 +42,7 @@ const UsernamePage = ({ username }: Props) => {
       <div className="p-5 sm:p-10 flex flex-col gap-6 items-center min-h-screen border-gray-100">
         <UserInfo name={name} bio={bio} image={image} username={username} />
 
-        {links && <UserLinks links={links} setLinks={setLinks} />}
+        {links && <UserLinks links={links} setLinks={setLinks} isOwner={isOwner} />}
 
         <div className="text-center opacity-40">
           <Link href="/" className="font-bold">SWAG<span className="opacity-60">.id</span></Link>

@@ -31,4 +31,36 @@ export const linkRouter = createTRPCRouter({
         },
       })
     }),
+
+  updateLink: protectedProcedure
+    .input(z.object({
+      text: rules.text,
+      href: rules.href,
+      id: rules.id,
+    }))
+    .mutation(({ ctx, input }) => {
+      const { text, href, id } = input
+      return ctx.prisma.link.update({
+        data: {
+          text,
+          href,
+        },
+        where: {
+          id,
+        },
+      })
+    }),
+
+  removeLink: protectedProcedure
+    .input(z.object({
+      id: rules.id,
+    }))
+    .mutation(({ ctx, input }) => {
+      const { id } = input
+      return ctx.prisma.link.delete({
+        where: {
+          id,
+        },
+      })
+    }),
 });

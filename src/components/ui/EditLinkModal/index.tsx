@@ -10,7 +10,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const validationSchema = z.object({
   text: rules.text,
@@ -20,29 +20,38 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>;
 
 type Props = {
-  links: {}[],
+  text: string,
+  href: string,
+  linkId: string,
+  links: {
+    id: string,
+    text: string,
+    href: string,
+    position: number,
+    userId: string,
+  }[],
   setLinks: Function,
   modalIsShown: boolean,
   setModalIsShown: Function,
 }
 
-export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIsShown }: Props) {
+export default function EditLinkModal({ text, href, linkId, links, setLinks, modalIsShown, setModalIsShown }: Props) {
   const [isLoading, setIsLoading] = useState(false)
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    setValue,
   } = useForm<ValidationSchema>({
-    defaultValues: {
-      text: '',
-      href: '',
-    },
     resolver: zodResolver(validationSchema),
   });
 
-  const addLinkMutation = api.link.addLink.useMutation({
+  useEffect(() => {
+    setValue('text', text)
+    setValue('href', href)
+  }, [text, href])
+
+  const updateLinkMutation = api.link.updateLink.useMutation({
     onMutate: () => {
       setIsLoading(true)
     },
@@ -50,9 +59,14 @@ export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIs
       console.log('error')
     },
     onSuccess: (data) => {
-      setLinks([data, ...links])
+      setLinks(links.map(link => {
+        if (link.id === data.id) {
+          return data
+        } else {
+          return link
+        }
+      }))
       setModalIsShown(false)
-      reset()
     },
     onSettled: () => {
       setIsLoading(false)
@@ -60,15 +74,14 @@ export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIs
   })
 
   const onSubmit: SubmitHandler<ValidationSchema> = (data) => {
-    const position = links.length + 1
-    addLinkMutation.mutateAsync({ ...data, position })
+    updateLinkMutation.mutate({ ...data, id: linkId })
   }
 
   return (
     <Modal
       open={modalIsShown}
-      title="Add a link"
-      description="Use the following form to add a new link in your page"
+      title="Edit link"
+      description="Use the following form to edit the selected link"
       onClose={() => setModalIsShown(false)}
     >
       <form
@@ -93,7 +106,7 @@ export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIs
 
           <div className="flex justify-end gap-2 mt-6">
             <Button onClick={() => setModalIsShown(false)}>Cancel</Button>
-            <Button color="pink" type="submit" isLoading={isLoading}>Add link</Button>
+            <Button color="pink" type="submit" isLoading={isLoading}>Update link</Button>
           </div>
         </fieldset>
       </form>
