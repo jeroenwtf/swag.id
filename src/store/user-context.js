@@ -26,13 +26,13 @@ export const UserContextProvider = ({ children }) => {
     isLoading: true,
   }
 
-  const { isLoading, data: userData } = api.user.getById.useQuery({ id: userId });
+  const userQuery = api.user.getById.useQuery({ id: userId });
 
-  if (!isLoading) {
+  if (userQuery.isSuccess) {
     contextData = {
       ...contextData,
-      data: userData,
-      isLoading,
+      data: userQuery.data,
+      isLoading: false,
     }
   }
 

@@ -22,7 +22,6 @@ const SIZES = {
 type Props = {
   url?: string;
   newTab?: boolean;
-  icon?: string;
   color?: keyof typeof COLORS;
   size?: keyof typeof SIZES;
   type?: "button" | "submit" | "reset" | undefined;
@@ -34,7 +33,6 @@ type Props = {
 export default function Button({
   url,
   newTab,
-  icon,
   color,
   size,
   type = 'button',
@@ -60,7 +58,6 @@ export default function Button({
 
   return (
     <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type} disabled={isLoading}>
-      {/* icon && <HeroIcon icon={icon} /> */}
       {isLoading && <div className={loadingIconWrapperClasses}><FontAwesomeIcon icon={faCircleNotch} className="animate-spin w-5 h-5" /></div>}
       {children && <span className={textClasses}>{children}</span>}
     </button>
