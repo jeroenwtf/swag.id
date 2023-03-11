@@ -30,9 +30,9 @@ type Props = {
     position: number,
     userId: string,
   }[],
-  setLinks: Function,
+  setLinks: any, // oh no
   modalIsShown: boolean,
-  setModalIsShown: Function,
+  setModalIsShown: any, // oh no
 }
 
 export default function EditLinkModal({ text, href, linkId, links, setLinks, modalIsShown, setModalIsShown }: Props) {

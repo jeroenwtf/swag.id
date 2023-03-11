@@ -16,7 +16,7 @@ type Props = {
   required: boolean,
 }
 
-const Input = forwardRef<HTMLInputElement, any>((props, ref) => {
+const Input = forwardRef<HTMLInputElement, any>((props: Props, ref) => {
   const {
     wrapperClassName = '',
     placeholder = '',

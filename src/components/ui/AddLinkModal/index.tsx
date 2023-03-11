@@ -20,10 +20,10 @@ const validationSchema = z.object({
 type ValidationSchema = z.infer<typeof validationSchema>;
 
 type Props = {
-  links: {}[],
-  setLinks: Function,
+  links: object[],
+  setLinks: any, // oh no
   modalIsShown: boolean,
-  setModalIsShown: Function,
+  setModalIsShown: any, // oh no
 }
 
 export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIsShown }: Props) {

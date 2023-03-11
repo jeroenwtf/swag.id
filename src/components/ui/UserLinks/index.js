@@ -17,9 +17,6 @@ export default function UserLinks({ links, setLinks, isOwner }) {
   const [editLinkHref, setEditLinkHref] = useState()
 
   const removeLinkMutation = api.link.removeLink.useMutation({
-    onMutate: () => {
-      //setIsDeleting(true)
-    },
     onError: () => {
       console.log('error')
     },
@@ -41,7 +38,7 @@ export default function UserLinks({ links, setLinks, isOwner }) {
     removeLinkMutation.mutate({ id: linkId })
   }
 
-  function handleEditButtonClick(linkId, element) {
+  function handleEditButtonClick(linkId) {
     const editLink = links.find(link => link.id === linkId)
     setEditLinkText(editLink.text)
     setEditLinkHref(editLink.href)
