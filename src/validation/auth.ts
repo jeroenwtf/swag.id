@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 
 export const rules = {
   id: z.string().trim(),
@@ -10,12 +10,16 @@ export const rules = {
   image: z.string().trim(),
 }
 
-export const schema = z.object({
-  id: rules.id,
-  name: rules.name,
-  bio: rules.bio,
+export const loginSchema = z.object({
   email: rules.email,
-  username: rules.username,
   password: rules.password,
-  image: rules.image,
+});
+
+export const signupSchema = z.object({
+  email: rules.email,
+  password: rules.password,
+  username: rules.username,
 })
+
+export type ILogin = z.infer<typeof loginSchema>
+export type ISignup = z.infer<typeof signupSchema>

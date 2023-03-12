@@ -1,6 +1,6 @@
 import { api } from '@/utils/api';
 import { useSession } from 'next-auth/react';
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
 const UserContext = createContext({
   modalIsShown: false,
@@ -19,7 +19,7 @@ const UserContext = createContext({
 export const UserContextProvider = ({ children }) => {
   const [modalIsShown, setModalIsShown] = useState(false)
   const { data: sessionData } = useSession()
-  const userId = sessionData && sessionData.user ? sessionData.user.id : ''
+  const userId = sessionData?.userId || ''
   let contextData = {
     modalIsShown,
     setModalIsShown,

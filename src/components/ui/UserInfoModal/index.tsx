@@ -49,7 +49,7 @@ export default function UserInfoModal() {
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<ValidationSchema> = async (data, event) => {
+  const onSubmit: SubmitHandler<ValidationSchema> = async (data) => {
     setIsLoading(true)
     let isSuccess = true;
     await meMutation.mutateAsync(data)
@@ -97,7 +97,6 @@ export default function UserInfoModal() {
       reader.readAsDataURL(changeEvent.target.files[0]);
     }
   }
-
 
   return (
     <Modal
