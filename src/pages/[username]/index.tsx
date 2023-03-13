@@ -8,31 +8,42 @@ import UserLinks from '@/components/ui/UserLinks'
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
+import { useProfileContext } from "@/store/profile-context";
 
 type Props = {
   username: string,
 }
 
 const UsernamePage = ({ username }: Props) => {
+  const [isLoading, setIsLoading] = useState(true)
   const [links, setLinks] = useState<any[]>([])
-  const { data: sessionData } = useSession();
-  const user = api.user.getByUsername.useQuery({ username });
-  const isOwner = sessionData && sessionData.user?.id === user?.data?.id
+  const { data: sessionData } = useSession()
+  const { userData, setUserData } = useProfileContext()
   
-  api.link.getLinksByUserId.useQuery({
-    userId: user.data?.id || ''
-  }, {
-    onSuccess: (links) => { setLinks(links) }
+  api.user.getByUsername.useQuery({ username }, {
+    onSuccess: (data) => {
+      setUserData(data)
+    },
+    onSettled: (data) => {
+      setIsLoading(false)
+    },
+    onError: (error) => {
+      console.log('error', error)
+    },
   });
 
-  if (user.isLoading) {
-    return <div>Loading</div>
-  } else if (!user || !user.data) {
-    return <div>Not found</div>
-    // notFound()
-  }
-
-  const { name, bio, image } = user.data
+  const isOwner = sessionData && sessionData.userId === userData?.id
+  
+  api.link.getLinksByUserId.useQuery({
+    userId: userData?.id || ''
+  }, {
+    onSuccess: (links) => {
+      setLinks(links)
+    }
+  });
+  
+  if (isLoading) { return <div>LOADING...</div> }
+  if (userData === null) { return <div>NOT FOUND</div> }
 
   return (
     <div>
@@ -40,7 +51,7 @@ const UsernamePage = ({ username }: Props) => {
         <UserTopBar />
       }
       <div className="p-5 sm:p-10 flex flex-col gap-6 items-center min-h-screen border-gray-100">
-        <UserInfo name={name} bio={bio} image={image} username={username} />
+        <UserInfo />
 
         {links && <UserLinks links={links} setLinks={setLinks} isOwner={isOwner} />}
 
