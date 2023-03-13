@@ -55,6 +55,7 @@ model User {
     username      String?   @unique
     email         String?   @unique
     emailVerified DateTime?
+    password      String?
     image         String?
     bio           String?
     links         Link[]

@@ -51,7 +51,7 @@ export default function UserLinks({ links, setLinks, isOwner }) {
       {isOwner &&
         <>
           <div className={addLinkButtonClass} onClick={() => setAddLinkModalIsShown(true)}>
-            <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
             <span>Add a new link</span>
           </div>
           <AddLinkModal links={links} setLinks={setLinks} modalIsShown={addLinkModalIsShown} setModalIsShown={setAddLinkModalIsShown}/>

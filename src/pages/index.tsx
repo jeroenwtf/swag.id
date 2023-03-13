@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import clsx from "clsx";
 
 const validationSchema = z.object({
   username: rules.username,
@@ -74,13 +75,14 @@ const AuthShowcase: React.FC = () => {
 
   if (userIsLoading) return <FontAwesomeIcon icon={faCircleNotch} className="animate-spin w-7 h-7 opacity-40" />
 
+  const buttonClasses = clsx('rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20')
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       {sessionData && <>
         <p className="text-center text-2xl text-white">
-          Logged in as {userData.name}
+          Logged in as {userData.name || `@${userData.username}`}
         </p>
-        {userData.username && <Link href={`/${userData.username}`}>Visit your profile</Link>}
         {!userData.username && (
           <div className="bg-black/10 rounded-lg px-6 py-4">
             <h2 className="text-lg font-semibold">Wait, you need a username!</h2>
@@ -102,12 +104,21 @@ const AuthShowcase: React.FC = () => {
         )}
       </>}
 
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={sessionData ? () => signOut() : () => signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
+      <div className="flex gap-4">
+        {sessionData &&
+          <>
+            {userData.username && <Link className={buttonClasses} href={`/${userData.username}`}>Visit your profile</Link>}
+            <button className={buttonClasses} onClick={() => signOut()}>Sign out</button>
+          </>
+        }
+
+        {!sessionData &&
+          <>
+            <Link className={buttonClasses} href="/auth/signup">Create account</Link>
+            <button className={buttonClasses} onClick={() => signIn()}>Sign in</button>
+          </>
+        }
+      </div>
     </div>
   );
 };
