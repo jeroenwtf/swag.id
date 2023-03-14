@@ -11,12 +11,14 @@ import { faPlus, faPencil, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useState } from "react"
 import { api } from "@/utils/api"
 
-export default function UserLinks({ links, setLinks, isOwner, modalIsShown, setModalIsShown }) {
+export default function UserLinks({ links, setLinks, isOwner }) {
   const [addLinkModalIsShown, setAddLinkModalIsShown] = useState(false)
   const [editLinkModalIsShown, setEditLinkModalIsShown] = useState(false)
   const [editLinkId, setEditLinkId] = useState()
+  const [editLinkElement, setEditLinkElement] = useState()
   const [editLinkText, setEditLinkText] = useState()
   const [editLinkHref, setEditLinkHref] = useState()
+  const [deleteConfirmModalIsShown, setDeleteConfirmModalIsShown] = useState(false)
 
   const removeLinkMutation = api.link.removeLink.useMutation({
     onError: () => {
@@ -25,6 +27,7 @@ export default function UserLinks({ links, setLinks, isOwner, modalIsShown, setM
     onSuccess: (data) => {
       const linkId = data.id
       setLinks(links.filter((link) => link.id !== linkId))
+      setDeleteConfirmModalIsShown(false)
     },
   })
 
@@ -36,14 +39,14 @@ export default function UserLinks({ links, setLinks, isOwner, modalIsShown, setM
   if (!links) { return <div>Loading links</div> }
 
   function handleDeleteButtonClick(linkId, element) {
-    setModalIsShown(true)
+    setEditLinkElement(element)
+    setEditLinkId(linkId)
+    setDeleteConfirmModalIsShown(true)
+  }
 
-    deleteSubmittedHandle = () => {
-      element.parentNode.classList.add('opacity-50')
-      removeLinkMutation.mutate({ id: linkId })
-      
-      setModalIsShown(false)
-    }
+  function handleDeleteConfirmationButtonClick() {
+    editLinkElement.parentNode.classList.add('opacity-50')
+    removeLinkMutation.mutate({ id: editLinkId })
   }
 
   function handleEditButtonClick(linkId) {
@@ -56,48 +59,46 @@ export default function UserLinks({ links, setLinks, isOwner, modalIsShown, setM
 
   return (
     <>
-      {modalIsShown &&
-        <Modal
-          open={modalIsShown}
-          title="Confirmation for deleting the link"
-          description="Confirmation dialog when you want delete one of your amazing links..."
-          onClose={() => setModalIsShown(false)}>
-          {/* <p>Confirmation dialog when you want delete one of your amazing links...</p> */}
-          <Button onClick={() => setModalIsShown(false)}>Cancel</Button>
-          <Button color="pink" onClick={deleteSubmittedHandle}>Confirm</Button>
-        </Modal>}
-    <div className="flex flex-col w-full max-w-md gap-3">
-      {isOwner &&
-        <>
-          <div className={addLinkButtonClass} onClick={() => setAddLinkModalIsShown(true)}>
-            <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
-            <span>Add a new link</span>
-          </div>
-          <AddLinkModal links={links} setLinks={setLinks} modalIsShown={addLinkModalIsShown} setModalIsShown={setAddLinkModalIsShown}/>
-        </>
-      }
+      <Modal
+        open={deleteConfirmModalIsShown}
+        title="Confirmation for deleting the link"
+        description="Confirmation dialog when you want delete one of your amazing links..."
+        onClose={() => setDeleteConfirmModalIsShown(false)}>
+        <Button onClick={() => setDeleteConfirmModalIsShown(false)}>Cancel</Button>
+        <Button color="pink" onClick={handleDeleteConfirmationButtonClick}>Delete link</Button>
+      </Modal>
+      <div className="flex flex-col w-full max-w-md gap-3">
+        {isOwner &&
+          <>
+            <div className={addLinkButtonClass} onClick={() => setAddLinkModalIsShown(true)}>
+              <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
+              <span>Add a new link</span>
+            </div>
+            <AddLinkModal links={links} setLinks={setLinks} modalIsShown={addLinkModalIsShown} setModalIsShown={setAddLinkModalIsShown}/>
+          </>
+        }
 
-      {isOwner &&
-        <EditLinkModal
-          text={editLinkText}
-          href={editLinkHref}
-          linkId={editLinkId}
-          links={links}
-          setLinks={setLinks}
-          modalIsShown={editLinkModalIsShown}
-          setModalIsShown={setEditLinkModalIsShown}
-        />
-      }
-      {links.map(link => (
-        <div key={link.id} className="relative group transition-opacity">
-          <Link className={linkClass} href={link.href}>
-            {link.text}
-          </Link>
-          {isOwner && <div className={editButtonClasses} onClick={(event) => handleEditButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faPencil} /></div>}
-          {isOwner && <div className={deleteButtonClasses} onClick={(event) => handleDeleteButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faTrashAlt} /></div>}
+        {isOwner &&
+          <EditLinkModal
+            text={editLinkText}
+            href={editLinkHref}
+            linkId={editLinkId}
+            links={links}
+            setLinks={setLinks}
+            modalIsShown={editLinkModalIsShown}
+            setModalIsShown={setEditLinkModalIsShown}
+          />
+        }
+        {links.map(link => (
+          <div key={link.id} className="relative group transition-opacity">
+            <Link className={linkClass} href={link.href}>
+              {link.text}
+            </Link>
+            {isOwner && <div className={editButtonClasses} onClick={(event) => handleEditButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faPencil} /></div>}
+            {isOwner && <div className={deleteButtonClasses} onClick={(event) => handleDeleteButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faTrashAlt} /></div>}
+          </div>
+        ))}
         </div>
-      ))}
-      </div>
       </>
   )
 }
