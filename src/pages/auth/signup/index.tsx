@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signupSchema } from "@/validation/auth";
 import { useState } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import Input from "@/components/ds/Input";
+import Button from "@/components/ds/Button";
 import { api } from '@/utils/api';
 
 const validationSchema = signupSchema

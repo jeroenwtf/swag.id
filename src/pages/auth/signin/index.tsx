@@ -14,8 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validation/auth";
 import { Fragment, useState } from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import Input from "@/components/ds/Input";
+import Button from "@/components/ds/Button";
 import Link from "next/link";
 
 const validationSchema = loginSchema

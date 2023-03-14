@@ -3,13 +3,15 @@ import Link from "next/link"
 
 import AddLinkModal from '@/components/ui/AddLinkModal'
 import EditLinkModal from '@/components/ui/EditLinkModal'
+import Modal from '@/components/ds/Modal'
+import Button from '@/components/ds/Button'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faPencil, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useState } from "react"
 import { api } from "@/utils/api"
 
-export default function UserLinks({ links, setLinks, isOwner }) {
+export default function UserLinks({ links, setLinks, isOwner, modalIsShown, setModalIsShown }) {
   const [addLinkModalIsShown, setAddLinkModalIsShown] = useState(false)
   const [editLinkModalIsShown, setEditLinkModalIsShown] = useState(false)
   const [editLinkId, setEditLinkId] = useState()
@@ -34,8 +36,14 @@ export default function UserLinks({ links, setLinks, isOwner }) {
   if (!links) { return <div>Loading links</div> }
 
   function handleDeleteButtonClick(linkId, element) {
-    element.parentNode.classList.add('opacity-50')
-    removeLinkMutation.mutate({ id: linkId })
+    setModalIsShown(true)
+
+    deleteSubmittedHandle = () => {
+      element.parentNode.classList.add('opacity-50')
+      removeLinkMutation.mutate({ id: linkId })
+      
+      setModalIsShown(false)
+    }
   }
 
   function handleEditButtonClick(linkId) {
@@ -47,6 +55,17 @@ export default function UserLinks({ links, setLinks, isOwner }) {
   }
 
   return (
+    <>
+      {modalIsShown &&
+        <Modal
+          open={modalIsShown}
+          title="Confirmation for deleting the link"
+          description="Confirmation dialog when you want delete one of your amazing links..."
+          onClose={() => setModalIsShown(false)}>
+          {/* <p>Confirmation dialog when you want delete one of your amazing links...</p> */}
+          <Button onClick={() => setModalIsShown(false)}>Cancel</Button>
+          <Button color="pink" onClick={deleteSubmittedHandle}>Confirm</Button>
+        </Modal>}
     <div className="flex flex-col w-full max-w-md gap-3">
       {isOwner &&
         <>
@@ -78,6 +97,7 @@ export default function UserLinks({ links, setLinks, isOwner }) {
           {isOwner && <div className={deleteButtonClasses} onClick={(event) => handleDeleteButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faTrashAlt} /></div>}
         </div>
       ))}
-    </div>
+      </div>
+      </>
   )
 }

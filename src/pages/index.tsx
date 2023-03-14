@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Input from "@/components/Input";
+import Input from "@/components/ds/Input";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useUserContext } from '@/store/user-context';
 
@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import Link from 'next/link';
 import { useState } from "react";
-import Button from "@/components/Button";
+import Button from "@/components/ds/Button";
 import { useRouter } from "next/router";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
