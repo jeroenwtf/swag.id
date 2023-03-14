@@ -1,16 +1,18 @@
 import { signOut } from "next-auth/react";
-import { useUserContext } from '@/store/user-context'
+import SettingsModal from "@/components/ui/SettingsModal"
+import { useProfileContext } from "@/store/profile-context";
 
 export default function UserTopBar() {
-  const { setModalIsShown } = useUserContext()
+  const { setSettingsModalIsShown } = useProfileContext()
 
   return (
     <div className="bg-black/80 text-gray-100 text-sm px-4 py-2 flex justify-between">
       <div>This is your profile</div>
       <div className="flex gap-2">
-        <button onClick={()=>{setModalIsShown(true)}}>Edit profile</button>
+        <button onClick={()=>{setSettingsModalIsShown(true)}}>Settings</button>
         <button onClick={() => signOut()}>Sign out</button>
       </div>
+      <SettingsModal />
     </div>
   )
 }

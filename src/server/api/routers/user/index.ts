@@ -2,7 +2,7 @@ import { z } from "zod";
 import { rules } from './validation';
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../../trpc";
 import * as trpc from "@trpc/server"
-import { signupSchema } from "@/validation/auth";
+import { signupSchema, accountSettingsSchema } from "@/validation/auth";
 import { hash } from "argon2";
 
 export const userRouter = createTRPCRouter({
@@ -87,23 +87,52 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
-  me: protectedProcedure
+  updateUser: protectedProcedure
     .input(z.object({
       name: rules.name,
       bio: rules.bio,
       username: rules.username,
+      image: rules.image,
     }))
     .mutation(({ ctx, input }) => {
-      const { name, bio, username } = input
+      const { name, bio, username, image } = input
+      let data: any = {
+        name,
+        bio,
+        username,
+      }
+
+      if (image !== '') {
+        data = { ...data, image }
+      }
+
       return ctx.prisma.user.update({
         where: {
-          id: ctx.session.user.id,
+          id: ctx.session.userId,
         },
-        data: {
-          name,
-          bio,
-          username,
+        data,
+      })
+    }),
+
+  updateAccount: protectedProcedure
+    .input(accountSettingsSchema)
+    .mutation(async ({ ctx, input }) => {
+      const { email, password } = input    
+      let data:{ email: string, password?: string } = { email }
+      
+      if (password && password !== '') {
+        const hashedPassword = await hash(password)
+        data = {
+          ...data,
+          password: hashedPassword,
+        }
+      }
+
+      return ctx.prisma.user.update({
+        where: {
+          id: ctx.session.userId,
         },
+        data,
       })
     }),
 
@@ -115,7 +144,7 @@ export const userRouter = createTRPCRouter({
       const { username } = input
       return ctx.prisma.user.update({
         where: {
-          id: ctx.session.user.id,
+          id: ctx.session.userId,
         },
         data: { username },
       })
@@ -129,7 +158,7 @@ export const userRouter = createTRPCRouter({
       const { image } = input
       return ctx.prisma.user.update({
         where: {
-          id: ctx.session.user.id,
+          id: ctx.session.userId,
         },
         data: {
           image,

@@ -1,14 +1,9 @@
 import Avatar from '@/components/ds/Avatar'
-import UserInfoModal from '@/components/ui/UserInfoModal'
+import { useProfileContext } from '@/store/profile-context'
 
-type Props = {
-  name: string | null,
-  bio: string | null,
-  image: string | null,
-  username: string,
-}
-
-export default function UserInfo({ name, bio, image, username }: Props) {
+export default function UserInfo() {
+  const { userData } = useProfileContext()
+  const { name, bio, username, image } = userData
   const displayName = name || username
 
   return (
@@ -16,8 +11,6 @@ export default function UserInfo({ name, bio, image, username }: Props) {
       {image &&
         <Avatar src={image} alt={`Avatar of ${displayName}`} />
       }
-
-      <UserInfoModal />
 
       <div>
         <h1 className="text-xl font-bold">{displayName}</h1>

@@ -21,7 +21,7 @@ export const linkRouter = createTRPCRouter({
     }))
     .mutation(({ ctx, input }) => {
       const { text, href, position } = input
-      const userId = ctx.session.user.id
+      const userId = ctx.session.userId
       return ctx.prisma.link.create({
         data: {
           text,
