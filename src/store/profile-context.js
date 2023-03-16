@@ -6,6 +6,7 @@ const ProfileContext = createContext({
   userData: {
     id: '',
     name: '',
+    displayName: '',
     bio: '',
     email: '',
     username: '',
@@ -17,10 +18,11 @@ const ProfileContext = createContext({
 export const ProfileContextProvider = ({ children }) => {
   const [settingsModalIsShown, setSettingsModalIsShown] = useState(false)
   const [userData, setUserData] = useState({})
+  const displayName = userData.name || userData.username
   const contextData = {
     settingsModalIsShown,
     setSettingsModalIsShown,
-    userData,
+    userData: { ...userData, displayName },
     setUserData,
   }
 

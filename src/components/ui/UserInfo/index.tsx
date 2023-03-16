@@ -3,8 +3,7 @@ import { useProfileContext } from '@/store/profile-context'
 
 export default function UserInfo() {
   const { userData } = useProfileContext()
-  const { name, bio, username, image } = userData
-  const displayName = name || username
+  const { displayName, bio, image } = userData
 
   return (
     <div className="flex max-w-md w-full text-center items-center flex-col gap-4">

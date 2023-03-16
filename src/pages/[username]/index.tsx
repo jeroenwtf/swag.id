@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { useProfileContext } from "@/store/profile-context";
+import Head from "next/head";
 
 type Props = {
   username: string,
@@ -46,20 +47,25 @@ const UsernamePage = ({ username }: Props) => {
   if (userData === null) { return <div>NOT FOUND</div> }
 
   return (
-    <div>
-      {isOwner &&
-        <UserTopBar />
-      }
-      <div className="p-5 sm:p-10 flex flex-col gap-6 items-center min-h-screen border-gray-100">
-        <UserInfo />
+    <>
+      <Head>
+        <title>{userData.displayName} - SWAG.id</title>
+      </Head>
+      <div>
+        {isOwner &&
+          <UserTopBar />
+        }
+        <div className="p-5 sm:p-10 flex flex-col gap-6 items-center min-h-screen border-gray-100">
+          <UserInfo />
 
-        {links && <UserLinks links={links} setLinks={setLinks} isOwner={isOwner} />}
+          {links && <UserLinks links={links} setLinks={setLinks} isOwner={isOwner} />}
 
-        <div className="text-center opacity-40">
-          <Link href="/" className="font-bold">SWAG<span className="opacity-60">.id</span></Link>
+          <div className="text-center opacity-40">
+            <Link href="/" className="font-bold">SWAG<span className="opacity-60">.id</span></Link>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
