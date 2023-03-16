@@ -1,6 +1,6 @@
-import Button from "@/components/Button";
-import Input from '@/components/Input';
-import Modal from "@/components/Modal";
+import Button from "@/components/ds/Button";
+import Input from '@/components/ds/Input';
+import Modal from "@/components/ds/Modal";
 
 import { api } from '@/utils/api';
 import { z } from 'zod';

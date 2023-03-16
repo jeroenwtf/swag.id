@@ -1,5 +1,5 @@
 import { Tab } from '@headlessui/react'
-import Modal from "@/components/Modal";
+import Modal from "@/components/ds/Modal";
 
 import ProfileTab from './profileTab';
 import AccountTab from './accountTab';

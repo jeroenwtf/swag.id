@@ -1,9 +1,9 @@
 import type { GetServerSideProps } from "next";
-import UserInfo from '@/components/UserInfo'
+import UserInfo from '@/components/ui/UserInfo'
 
 import { api } from "@/utils/api";
 
-import UserTopBar from "@/components/UserTopBar";
+import UserTopBar from "@/components/ui/UserTopBar";
 import UserLinks from '@/components/ui/UserLinks'
 import { useSession } from "next-auth/react";
 import Link from "next/link";
