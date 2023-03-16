@@ -16,6 +16,7 @@ import { useProfileContext } from '@/store/profile-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Avatar from '@/components/ds/Avatar';
+import { toast } from 'react-hot-toast';
 
 const validationSchema = z.object({
   name: rules.name,
@@ -40,6 +41,7 @@ export default function ProfileTab() {
       setIsLoading(false)
     },
     onSuccess: async (data) => {
+      toast.success('Profile updated successfully')
       if (data.username !== userData.username) {
         console.log('Username changed, redirect required') // TODO: Do this
       }

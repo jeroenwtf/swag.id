@@ -13,6 +13,7 @@ import { useUserContext } from '@/store/user-context';
 import { accountSettingsSchema } from '@/validation/auth';
 
 import { useProfileContext } from '@/store/profile-context';
+import { toast } from 'react-hot-toast';
 
 const validationSchema = accountSettingsSchema
 
@@ -31,6 +32,7 @@ export default function AccountTab() {
     },
     onSuccess: (data) => {
       console.log('success', data)
+      toast.success('Account info updated successfully')
     },
     onError: (error) => {
       console.log(error)

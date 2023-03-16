@@ -7,6 +7,7 @@ import { ProfileContextProvider } from '@/store/profile-context'
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import { Toaster } from "react-hot-toast";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,6 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <UserContextProvider>
         <ProfileContextProvider>
+          <div><Toaster /></div>
           <Component {...pageProps} />
         </ProfileContextProvider>
       </UserContextProvider>

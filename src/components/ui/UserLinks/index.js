@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faPencil, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useState } from "react"
 import { api } from "@/utils/api"
+import { toast } from "react-hot-toast"
 
 export default function UserLinks({ links, setLinks, isOwner }) {
   const [addLinkModalIsShown, setAddLinkModalIsShown] = useState(false)
@@ -28,6 +29,7 @@ export default function UserLinks({ links, setLinks, isOwner }) {
       const linkId = data.id
       setLinks(links.filter((link) => link.id !== linkId))
       setDeleteConfirmModalIsShown(false)
+      toast.success('Link deleted successfully')
     },
   })
 

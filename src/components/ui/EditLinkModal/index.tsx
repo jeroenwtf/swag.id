@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEffect, useState } from 'react';
+import { toast } from "react-hot-toast";
 
 const validationSchema = z.object({
   text: rules.text,
@@ -67,6 +68,7 @@ export default function EditLinkModal({ text, href, linkId, links, setLinks, mod
         }
       }))
       setModalIsShown(false)
+      toast.success('Link updated successfully')
     },
     onSettled: () => {
       setIsLoading(false)

@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useState } from 'react';
+import { toast } from "react-hot-toast";
 
 const validationSchema = z.object({
   text: rules.text,
@@ -53,6 +54,7 @@ export default function AddLinkModal({ links, setLinks, modalIsShown, setModalIs
       setLinks([data, ...links])
       setModalIsShown(false)
       reset()
+      toast.success('Link added successfully')
     },
     onSettled: () => {
       setIsLoading(false)
