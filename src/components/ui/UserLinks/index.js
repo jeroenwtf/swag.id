@@ -61,11 +61,15 @@ export default function UserLinks({ links, setLinks, isOwner }) {
     <>
       <Modal
         open={deleteConfirmModalIsShown}
-        title="Confirmation for deleting the link"
-        description="Confirmation dialog when you want delete one of your amazing links..."
-        onClose={() => setDeleteConfirmModalIsShown(false)}>
-        <Button onClick={() => setDeleteConfirmModalIsShown(false)}>Cancel</Button>
-        <Button color="pink" onClick={handleDeleteConfirmationButtonClick}>Delete link</Button>
+        title="Are you sure you want to delete the link?"
+        description="This action can&apos;t be undone."
+        onClose={() => setDeleteConfirmModalIsShown(false)}
+        size="small"
+      >
+        <div className="flex justify-end gap-2 mt-6">
+          <Button onClick={() => setDeleteConfirmModalIsShown(false)}>Cancel</Button>
+          <Button color="pink" onClick={handleDeleteConfirmationButtonClick}>Delete link</Button>
+        </div>
       </Modal>
       <div className="flex flex-col w-full max-w-md gap-3">
         {isOwner &&
