@@ -9,7 +9,7 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useUserContext } from '@/store/user-context';
 import { useProfileContext } from '@/store/profile-context';
 
@@ -39,7 +39,7 @@ export default function ProfileTab() {
     onSettled: () => {
       setIsLoading(false)
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.username !== userData.username) {
         console.log('Username changed, redirect required') // TODO: Do this
       }
@@ -56,9 +56,9 @@ export default function ProfileTab() {
     formState: { errors },
   } = useForm<ValidationSchema>({
     defaultValues: {
-      name: userData.name,
-      bio: userData.bio,
-      username: userData.username,
+      name: profileData.name,
+      bio: profileData.bio,
+      username: profileData.username,
     },
     resolver: zodResolver(validationSchema),
   });
