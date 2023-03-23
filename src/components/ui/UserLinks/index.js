@@ -11,6 +11,7 @@ import { faPlus, faPencil, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useState } from "react"
 import { api } from "@/utils/api"
 import { toast } from "react-hot-toast"
+import { supportsTouchEvents } from "detect-it"
 
 export default function UserLinks({ links, setLinks, isOwner }) {
   const [addLinkModalIsShown, setAddLinkModalIsShown] = useState(false)
@@ -35,8 +36,10 @@ export default function UserLinks({ links, setLinks, isOwner }) {
 
   const addLinkButtonClass = clsx('flex gap-2 justify-center items-center cursor-pointer rounded-md text-gray-400 border-2 border-dotted border-gray-300 px-4 py-3')
   const linkClass = clsx('block rounded-md px-4 py-4 relative text-center bg-gray-200')
-  const editButtonClasses = clsx('absolute left-3 top-3 bg-black/70 text-white cursor-pointer px-2.5 py-1.5 rounded text-sm opacity-60 hover:opacity-100 hidden group-hover:block')
-  const deleteButtonClasses = clsx('absolute right-3 top-3 bg-black/70 text-white cursor-pointer px-2.5 py-1.5 rounded text-sm opacity-60 hover:opacity-100 hidden group-hover:block')
+  const linkButtonClasses = 'absolute top-3 bg-black/70 text-white cursor-pointer px-2.5 py-1.5 rounded text-sm'
+  const noHoverButtonClasses = !supportsTouchEvents && 'opacity-60 hover:opacity-100 hidden group-hover:block'
+  const editButtonClasses = clsx('left-3', linkButtonClasses, noHoverButtonClasses)
+  const deleteButtonClasses = clsx('right-3', linkButtonClasses, noHoverButtonClasses)
 
   if (!links) { return <div>Loading links</div> }
 
