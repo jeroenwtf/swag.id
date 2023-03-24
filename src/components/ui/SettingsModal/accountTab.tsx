@@ -65,6 +65,10 @@ export default function AccountTab() {
     await updateAccountMutation.mutateAsync(data)
   }
 
+  function handleNewPasswordButtonClick() {
+    alert('Hah, soon.')
+  }
+
   function handleDeleteButtonClick() {
     setDeleteConfirmModalIsShown(true)
   }
@@ -106,29 +110,22 @@ export default function AccountTab() {
               {...register('email')}
             />
 
-            <div className="mt-4">
-              <p>If you want to change your password, type it twice. If you don&apos;t, leave it blank.</p>
-            </div>
-            <Input
-              label="Password"
-              placeholder="Your new password"
-              type="password"
-              errors={errors.password}
-              {...register('password')}
-            />
-            <Input
-              label="Repeat your password"
-              placeholder="Yes, again"
-              type="password"
-              errors={errors.confirmPassword}
-              {...register('confirmPassword')}
-            />
-
             <div className="flex gap-2 mt-6">
               <Button color="pink" type="submit" isLoading={isLoading}>Save account settings</Button>
             </div>
           </fieldset>
         </form>
+
+        <hr />
+        
+        <div>
+          <h3 className="text-lg font-semibold mb-2">Reset password</h3>
+          <p className='mb-4'>
+            You can regenerate your password (or create it if you don&apos;t have it). Click on the button
+            and you will receive an email with a link.
+          </p>
+          <Button color="orange" size="small" onClick={handleNewPasswordButtonClick}>Send reset password email</Button> 
+        </div>
 
         <hr />
         

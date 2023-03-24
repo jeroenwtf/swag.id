@@ -117,24 +117,13 @@ export const userRouter = createTRPCRouter({
   updateAccount: protectedProcedure
     .input(accountSettingsSchema)
     .mutation(async ({ ctx, input }) => {
-      const { email, password } = input    
-      let data:{ email: string, password?: string } = { email }
-      
-      if (password && password !== '') {
-        console.log({ password })
-        const hashedPassword = await hash(password)
-        console.log({ hashedPassword })
-        data = {
-          ...data,
-          password: hashedPassword,
-        }
-      }
+      const { email } = input    
 
       return ctx.prisma.user.update({
         where: {
           id: ctx.session.userId,
         },
-        data,
+        data: { email },
       })
     }),
 

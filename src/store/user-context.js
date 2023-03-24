@@ -12,6 +12,7 @@ const UserContext = createContext({
     email: '',
     username: '',
     image: '',
+    password: '',
   },
   isLoading: false,
 })
