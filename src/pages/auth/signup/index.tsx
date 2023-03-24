@@ -8,12 +8,16 @@ import { useState } from "react";
 import Input from "@/components/ds/Input";
 import Button from "@/components/ds/Button";
 import { api } from '@/utils/api';
+import { getProviders, getSession } from 'next-auth/react';
+import { GetServerSidePropsContext } from 'next';
+import Providers from '@/components/ui/Providers';
+import Link from 'next/link';
 
 const validationSchema = signupSchema
 
 type ValidationSchema = z.infer<typeof validationSchema>;
 
-export default function SignupPage() {
+export default function SignupPage({ providers }: any) {
   const [isLoading, setIsLoading] = useState(false)
 
   const {
@@ -45,33 +49,59 @@ export default function SignupPage() {
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <fieldset disabled={isLoading} className="flex flex-col gap-3">
-          <Input
-            label="E-mail"
-            type="text"
-            placeholder="your@email.com"
-            errors={errors.email}
-            {...register('email')}
-          />
-          <Input
-            label="Password"
-            type="password"
-            errors={errors.password}
-            {...register('password')}
-          />
-          <Input
-            label="Username"
-            hint="Will be your URL."
-            type="text"
-            placeholder="example"
-            prefix="https://swag.id/"
-            errors={errors.username}
-            {...register('username')}
-          />
-          <Button color="pink" type="submit" isLoading={isLoading}>Create account</Button>
-        </fieldset>
-      </form>
+      <div className="flex flex-col gap-6 w-full max-w-xs">
+        <Providers providers={providers} />
+        <hr />
+        <div>
+          <p className="mb-3">Or use your email and password to sign up.</p>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <fieldset disabled={isLoading} className="flex flex-col gap-3">
+              <Input
+                label="E-mail"
+                type="text"
+                placeholder="your@email.com"
+                errors={errors.email}
+                {...register('email')}
+              />
+              <Input
+                label="Password"
+                type="password"
+                errors={errors.password}
+                {...register('password')}
+              />
+              <Input
+                label="Username"
+                hint="Will be your URL."
+                type="text"
+                placeholder="example"
+                prefix="https://swag.id/"
+                errors={errors.username}
+                {...register('username')}
+              />
+              <Button color="pink" type="submit" isLoading={isLoading}>Create account</Button>
+            </fieldset>
+          </form>
+        </div>
+        <hr />
+        <div>Already have an account? <Link className='text-pink-500 font-semibold' href="/auth/signin">Sign in!</Link></div>
+      </div>
     </div>
   )
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getSession(context)
+  
+  // If the user is already logged in, redirect.
+  // Note: Make sure not to redirect to the same page
+  // To avoid an infinite loop!
+  if (session) {
+    return { redirect: { destination: "/" } };
+  }
+
+  const providers = await getProviders();
+  
+  return {
+    props: { providers: providers ?? [] },
+  }
 }

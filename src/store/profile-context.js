@@ -17,12 +17,18 @@ const ProfileContext = createContext({
 
 export const ProfileContextProvider = ({ children }) => {
   const [settingsModalIsShown, setSettingsModalIsShown] = useState(false)
-  const [userData, setUserData] = useState({})
-  const displayName = userData.name || userData.username
+  const [userData, setUserData] = useState()
+  let contextUserData
+
+  if (userData) {
+    const displayName = userData.name || userData.username
+    contextUserData = { ...userData, displayName }
+  }
+
   const contextData = {
     settingsModalIsShown,
     setSettingsModalIsShown,
-    userData: { ...userData, displayName },
+    userData: contextUserData,
     setUserData,
   }
 

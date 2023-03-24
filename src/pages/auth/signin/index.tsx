@@ -2,33 +2,21 @@ import clsx from "clsx";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getProviders, getSession, signIn } from "next-auth/react"
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook, faGithub, faGoogle, faInstagram } from '@fortawesome/free-brands-svg-icons'
-import { faEnvelope, faSquareFull } from "@fortawesome/free-solid-svg-icons";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-
 import { z } from 'zod';
 
 import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validation/auth";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import Input from "@/components/ds/Input";
 import Button from "@/components/ds/Button";
 import Link from "next/link";
+import Providers from "@/components/ui/Providers";
 
 const validationSchema = loginSchema
 
 type ValidationSchema = z.infer<typeof validationSchema>;
-
-const PROVIDER_ICONS: {[key:string]: IconProp} = {
-  credentials: faEnvelope,
-  facebook: faFacebook,
-  github: faGithub,
-  google: faGoogle,
-  instagram: faInstagram,
-}
 
 export default function SignInPage({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isLoading, setIsLoading] = useState(false)
@@ -59,49 +47,40 @@ export default function SignInPage({ providers }: InferGetServerSidePropsType<ty
     }
   }
 
-  const buttonClasses = clsx('border rounded-md bg-white w-full px-5 py-3 text-gray-800 flex gap-3 items-center justify-start')
-
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="flex flex-col gap-4">
-        {Object.values(providers).map((provider) => (
-          <Fragment key={provider.id}>
-            {provider.id === 'credentials' && <hr className="my-4" />}
-            <div>
-              {provider.id === 'credentials' &&
-                <div>
-                  <p className="mb-3">Use your email and password to sign up.</p>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <fieldset disabled={isLoading} className="flex flex-col gap-3">
-                      <Input
-                        label="E-mail"
-                        type="text"
-                        placeholder="your@email.com"
-                        errors={errors.email}
-                        {...register('email')}
-                      />
-                      <Input
-                        label="Password"
-                        type="password"
-                        errors={errors.password}
-                        {...register('password')}
-                      />
-                      <Button color="pink" type="submit" isLoading={isLoading}>Sign in with e-mail</Button>
-                    </fieldset>
-                  </form>
-                </div>
-              }
-              {provider.id !== 'credentials' &&
-                <button className={buttonClasses} onClick={() => signIn(provider.id)}>
-                  <FontAwesomeIcon icon={PROVIDER_ICONS[provider.id] || faSquareFull} />
-                  <span>Sign in with {provider.name}</span>
-                </button>
-              }
+      <div className="flex flex-col gap-6 w-full max-w-xs">
+        <Providers providers={providers} />
+        <hr />
+        {Object.values(providers).map((provider) => {
+          if (provider.id !== 'credentials') return null
+
+          return (
+            <div key={provider.id}>
+              <p className="mb-3">Or use your email and password to sign in.</p>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <fieldset disabled={isLoading} className="flex flex-col gap-3">
+                  <Input
+                    label="E-mail"
+                    type="text"
+                    placeholder="your@email.com"
+                    errors={errors.email}
+                    {...register('email')}
+                  />
+                  <Input
+                    label="Password"
+                    type="password"
+                    errors={errors.password}
+                    {...register('password')}
+                  />
+                  <Button color="pink" type="submit" isLoading={isLoading}>Sign in with e-mail</Button>
+                </fieldset>
+              </form>
             </div>
-          </Fragment>
-        ))}
-        <hr className="my-4" />
-        <div>Don&apos;t have an account? <Link href="/auth/signup">Create one!</Link></div>
+          )
+        })}
+        <hr />
+        <div>Don&apos;t have an account? <Link className="text-pink-500 font-semibold" href="/auth/signup">Create one!</Link></div>
       </div>
     </div>
   )

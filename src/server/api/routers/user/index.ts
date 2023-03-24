@@ -121,7 +121,9 @@ export const userRouter = createTRPCRouter({
       let data:{ email: string, password?: string } = { email }
       
       if (password && password !== '') {
+        console.log({ password })
         const hashedPassword = await hash(password)
+        console.log({ hashedPassword })
         data = {
           ...data,
           password: hashedPassword,
@@ -133,6 +135,15 @@ export const userRouter = createTRPCRouter({
           id: ctx.session.userId,
         },
         data,
+      })
+    }),
+
+  deleteAccount: protectedProcedure
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.user.delete({
+        where: {
+          id: ctx.session.userId,
+        },
       })
     }),
 

@@ -42,9 +42,9 @@ const UsernamePage = ({ username }: Props) => {
       setLinks(links)
     }
   });
-  
+
   if (isLoading) { return <div>LOADING...</div> }
-  if (userData === null) { return <div>NOT FOUND</div> }
+  if (!userData) { return <div>NOT FOUND</div> }
 
   return (
     <>
