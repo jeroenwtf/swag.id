@@ -13,7 +13,7 @@ const PROVIDER_ICONS: {[key:string]: IconProp} = {
   instagram: faInstagram,
 }
 
-export default function Providers({ providers }: any) {
+export default function Providers({ providers, copy }: any) {
   const buttonClasses = clsx('border rounded-md bg-white w-full px-5 py-3 text-gray-800 flex gap-3 items-center justify-start')
 
   return (
@@ -25,7 +25,7 @@ export default function Providers({ providers }: any) {
           <div key={provider.id}>
             <button className={buttonClasses} onClick={() => signIn(provider.id, { callbackUrl: `${window.location.origin}/` })}>
               <FontAwesomeIcon className='shrink-0 w-5' icon={PROVIDER_ICONS[provider.id] || faSquareFull} />
-              <span className="whitespace-nowrap">Sign in with {provider.name}</span>
+              <span className="whitespace-nowrap">{copy} {provider.name}</span>
             </button>
           </div>
         )

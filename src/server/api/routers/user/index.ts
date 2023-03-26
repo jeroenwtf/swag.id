@@ -4,6 +4,7 @@ import { createTRPCRouter, publicProcedure, protectedProcedure } from "../../trp
 import * as trpc from "@trpc/server"
 import { signupSchema, accountSettingsSchema } from "@/validation/auth";
 import { hash } from "argon2";
+import welcomeTemplate from "@/emails/welcome"
 
 export const userRouter = createTRPCRouter({
   getByUsername: publicProcedure
@@ -29,24 +30,32 @@ export const userRouter = createTRPCRouter({
       if (exists) {
         throw new trpc.TRPCError({
           code: "CONFLICT",
-          message: "User already exists",
+          message: "User already exists with that email",
         })
       }
 
       const hashedPassword = await hash(password)
 
-      const result: any = await ctx.prisma.user.create({
+      await ctx.prisma.user.create({
         data: {
           username,
           email,
           password: hashedPassword,
+          image: 'https://res.cloudinary.com/dmgib2a0t/image/upload/v1679835796/placeholders/avatar_placeholder_fah4lh.png',
+        }
+      })
+
+      welcomeTemplate.send({
+        data: {},
+        meta: {
+          to: email,
         }
       })
 
       return {
         status: 201,
-        message: 'Account created successfully',
-        result: result.email,
+        email: email,
+        password: password,
       }
     }),
 

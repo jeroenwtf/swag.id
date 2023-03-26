@@ -80,7 +80,7 @@ export default function ProfileTab() {
         method: 'POST',
         body: formData
       }).then(r => r.json()).then(data => {
-        imageUrl = data.url
+        imageUrl = data.secure_url
       });
     }
 

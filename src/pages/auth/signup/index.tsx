@@ -8,10 +8,11 @@ import { useState } from "react";
 import Input from "@/components/ds/Input";
 import Button from "@/components/ds/Button";
 import { api } from '@/utils/api';
-import { getProviders, getSession } from 'next-auth/react';
+import { getProviders, getSession, signIn } from 'next-auth/react';
 import { GetServerSidePropsContext } from 'next';
 import Providers from '@/components/ui/Providers';
 import Link from 'next/link';
+import { toast } from 'react-hot-toast';
 
 const validationSchema = signupSchema
 
@@ -24,20 +25,24 @@ export default function SignupPage({ providers }: any) {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<ValidationSchema>({
     resolver: zodResolver(validationSchema),
   });
 
   const signupMutation = api.user.signUp.useMutation({
-    onSettled: (data) => {
+    onSettled: async (data) => {
       setIsLoading(false)
 
       if (data?.status === 201) {
-        reset()
-        // TODO: Add a nice message
-        alert(`Account created! Validate the email (${data?.result})`)
+        await signIn('credentials', {
+          email: data.email,
+          password: data.password,
+          callbackUrl: '/',
+        });
       }
+    },
+    onError: (error) => {
+      toast.error(error.message)
     }
   })
 
@@ -50,7 +55,7 @@ export default function SignupPage({ providers }: any) {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col gap-6 w-full max-w-xs">
-        <Providers providers={providers} />
+        <Providers providers={providers} copy="Sign up with" />
         <hr />
         <div>
           <p className="mb-3">Or use your email and password to sign up.</p>

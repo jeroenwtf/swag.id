@@ -19,7 +19,7 @@ const config = {
         hostname: "**.googleusercontent.com",
       },
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
     ],

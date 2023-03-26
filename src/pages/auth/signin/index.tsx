@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getProviders, getSession, signIn } from "next-auth/react"
 
@@ -50,7 +49,7 @@ export default function SignInPage({ providers }: InferGetServerSidePropsType<ty
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col gap-6 w-full max-w-xs">
-        <Providers providers={providers} />
+        <Providers providers={providers} copy="Sign in with" />
         <hr />
         {Object.values(providers).map((provider) => {
           if (provider.id !== 'credentials') return null

@@ -9,6 +9,7 @@ import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db";
 import { loginSchema } from "@/validation/auth";
 import { verify } from "argon2";
+import welcomeTemplate from "@/emails/welcome"
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -77,6 +78,18 @@ export const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
+  events: {
+    createUser: async ({ user }) => {      
+      if (user.email) {
+        welcomeTemplate.send({
+          data: {},
+          meta: {
+            to: user.email,
+          }
+        })
+      }
+    },
+  },
   pages: {
     signIn: "/auth/signin",
     newUser: "/auth/signup",

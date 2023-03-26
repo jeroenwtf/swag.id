@@ -3,18 +3,18 @@ import welcomeTemplate from "@/emails/welcome"
 import resetPasswordTemplate from "@/emails/resetPassword"
 import { generateRandomString } from "@/utils/helpers"
 import { forgotPasswordSchema } from "@/validation/auth";
+import { z } from "zod";
 
 export const emailRouter = createTRPCRouter({
-  welcome: protectedProcedure
-    .mutation(({ ctx }) => {
-      const to = ctx.session?.user?.email
-
-      if (!to) return false
+  welcome: publicProcedure
+    .input(z.object({ email: z.string().trim().email() }))
+    .mutation(({ input }) => {
+      const { email } = input
 
       return welcomeTemplate.send({
         data: {},
         meta: {
-          to,
+          to: email,
         }
       })
     }),
