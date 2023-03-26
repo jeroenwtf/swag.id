@@ -7,6 +7,9 @@ import { ProfileContextProvider } from '@/store/profile-context'
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
 import { Toaster } from "react-hot-toast";
 
 const MyApp: AppType<{ session: Session | null }> = ({
