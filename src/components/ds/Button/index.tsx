@@ -26,6 +26,7 @@ type Props = {
   size?: keyof typeof SIZES;
   type?: "button" | "submit" | "reset" | undefined;
   isLoading?: boolean;
+  disabled?: boolean;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler;
 };
@@ -37,12 +38,14 @@ export default function Button({
   size,
   type = 'button',
   isLoading,
+  disabled = false,
   children,
   onClick,
 }: Props) {
   const buttonClasses = clsx(
     "flex cursor-pointer items-center justify-center gap-1.5 rounded font-semibold relative disabled:opacity-70 disabled:cursor-not-allowed",
-    color && Object.hasOwn(COLORS, color) ? COLORS[color] : COLORS.gray,
+    color && !disabled && Object.hasOwn(COLORS, color) ? COLORS[color] : COLORS.gray,
+    disabled && COLORS.gray,
     size && Object.hasOwn(SIZES, size) ? SIZES[size] : SIZES.medium,
   );
   const textClasses = clsx(
@@ -57,7 +60,7 @@ export default function Button({
   }
 
   return (
-    <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type} disabled={isLoading}>
+    <button className={buttonClasses} onClick={onClick ? onClick : openTab} type={type} disabled={isLoading || disabled}>
       {isLoading && <div className={loadingIconWrapperClasses}><FontAwesomeIcon icon={faCircleNotch} className="animate-spin w-5 h-5" /></div>}
       {children && <span className={textClasses}>{children}</span>}
     </button>

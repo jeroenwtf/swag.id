@@ -22,6 +22,8 @@ type ValidationSchema = z.infer<typeof validationSchema>
 
 export default function AccountTab() {
   const [isLoading, setIsLoading] = useState(false)
+  const [passwordResetIsLoading, setPasswordResetIsLoading] = useState(false)
+  const [passwordResetRequested, setPasswordResetRequested] = useState(false)
   const [deleteConfirmModalIsShown, setDeleteConfirmModalIsShown] = useState(false)
   const { data: userData } = useUserContext()
 
@@ -39,6 +41,19 @@ export default function AccountTab() {
     onError: (error) => {
       console.log(error)
     }
+  })
+
+  const resetPasswordEmailMutation = api.email.resetPassword.useMutation({
+    onMutate: () => {
+      setPasswordResetIsLoading(true)
+    },
+    onSettled: () => {
+      setPasswordResetIsLoading(false)
+    },
+    onSuccess: () => {
+      setPasswordResetRequested(true)
+      toast.success('Password reset requested successfully')
+    },
   })
 
   const deleteAccountMutation = api.user.deleteAccount.useMutation({
@@ -66,7 +81,7 @@ export default function AccountTab() {
   }
 
   function handleNewPasswordButtonClick() {
-    alert('Hah, soon.')
+    resetPasswordEmailMutation.mutate({ email: userData.email })
   }
 
   function handleDeleteButtonClick() {
@@ -76,10 +91,6 @@ export default function AccountTab() {
   function handleDeleteConfirmationButtonClick() {
     deleteAccountMutation.mutate()
   }
-
-
-  // TODO: Handle no password set
-  // TODO: Add check to delete user in case no password was set
 
   return (
     <>
@@ -124,7 +135,13 @@ export default function AccountTab() {
             You can regenerate your password (or create it if you don&apos;t have it). Click on the button
             and you will receive an email with a link.
           </p>
-          <Button color="orange" size="small" onClick={handleNewPasswordButtonClick}>Send reset password email</Button> 
+          <Button
+            color="orange"
+            disabled={passwordResetRequested}
+            isLoading={passwordResetIsLoading}
+            size="small"
+            onClick={handleNewPasswordButtonClick}
+          >{passwordResetRequested ? 'Check your email' : 'Send reset password email'}</Button> 
         </div>
 
         <hr />

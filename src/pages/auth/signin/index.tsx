@@ -67,12 +67,15 @@ export default function SignInPage({ providers }: InferGetServerSidePropsType<ty
                     errors={errors.email}
                     {...register('email')}
                   />
-                  <Input
-                    label="Password"
-                    type="password"
-                    errors={errors.password}
-                    {...register('password')}
-                  />
+                  <div>
+                    <Input
+                      label="Password"
+                      type="password"
+                      errors={errors.password}
+                      {...register('password')}
+                    />
+                    <div className="text-right"><Link className="text-pink-500 text-sm underline" href="/auth/forgot-password">Forgot your password?</Link></div>
+                  </div>
                   <Button color="pink" type="submit" isLoading={isLoading}>Sign in with e-mail</Button>
                 </fieldset>
               </form>

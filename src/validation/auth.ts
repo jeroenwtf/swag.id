@@ -29,19 +29,25 @@ export const accountSettingsSchema = z.object({
   email: rules.email,
 })
 
-// export const accountSettingsSchema = z.object({
-//   email: rules.email,
-//   confirmPassword: rules.passwordOptional,
-// }).superRefine(({ confirmPassword, password }, ctx) => {
-//   if (confirmPassword !== password) {
-//     ctx.addIssue({
-//       code: "custom",
-//       message: "The passwords did not match",
-//       path: ['confirmPassword'],
-//     });
-//   }
-// })
+export const resetPasswordSchema = z.object({
+  password: rules.password,
+  confirmPassword: rules.passwordOptional,
+}).superRefine(({ confirmPassword, password }, ctx) => {
+  if (confirmPassword !== password) {
+    ctx.addIssue({
+      code: "custom",
+      message: "The passwords did not match",
+      path: ['confirmPassword'],
+    });
+  }
+})
+
+export const forgotPasswordSchema = z.object({
+  email: rules.email,
+})
 
 export type ILogin = z.infer<typeof loginSchema>
 export type ISignup = z.infer<typeof signupSchema>
 export type IAccountSettings = z.infer<typeof accountSettingsSchema>
+export type IResetPassword = z.infer<typeof resetPasswordSchema>
+export type IForgotPassword = z.infer<typeof forgotPasswordSchema>

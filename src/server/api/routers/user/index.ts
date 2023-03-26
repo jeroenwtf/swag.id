@@ -128,7 +128,7 @@ export const userRouter = createTRPCRouter({
     }),
 
   deleteAccount: protectedProcedure
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx }) => {
       return ctx.prisma.user.delete({
         where: {
           id: ctx.session.userId,
@@ -147,6 +147,36 @@ export const userRouter = createTRPCRouter({
           id: ctx.session.userId,
         },
         data: { username },
+      })
+    }),
+
+  updatePassword: publicProcedure
+    .input(z.object({
+      password: rules.password,
+      resetPasswordToken: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { password, resetPasswordToken } = input
+      const hashedPassword = await hash(password)
+
+      const userData = await ctx.prisma.user.findUnique({
+        where: { resetPasswordToken }
+      })
+
+      if (!userData?.resetPasswordTokenExpires || resetPasswordToken !== userData?.resetPasswordToken) {
+        throw new Error('Token invalid. Request to reset the password again.')
+      }
+
+      const tokenExpired = userData?.resetPasswordTokenExpires < new Date()
+      if (tokenExpired) throw new Error('The token has expired. Request to reset the password again.')
+
+      return ctx.prisma.user.update({
+        where: { resetPasswordToken },
+        data: {
+          password: hashedPassword,
+          resetPasswordToken: null,
+          resetPasswordTokenExpires: null,
+        },
       })
     }),
 
