@@ -13,11 +13,20 @@ const ProfileContext = createContext({
     image: '',
   },
   setUserData: (value) => undefined,
+  themeData: {
+    id: '',
+    bodyTextColor: '',
+    bodyBackgroundColor: '',
+    linkTextColor: '',
+    linkBackgroundColor: '',
+  },
+  setThemeData: (value) => undefined,
 })
 
 export const ProfileContextProvider = ({ children }) => {
   const [settingsModalIsShown, setSettingsModalIsShown] = useState(false)
   const [userData, setUserData] = useState()
+  const [themeData, setThemeData] = useState()
   let contextUserData
 
   if (userData) {
@@ -30,6 +39,8 @@ export const ProfileContextProvider = ({ children }) => {
     setSettingsModalIsShown,
     userData: contextUserData,
     setUserData,
+    themeData,
+    setThemeData,
   }
 
   return (

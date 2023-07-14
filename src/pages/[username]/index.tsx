@@ -19,8 +19,8 @@ const UsernamePage = ({ username }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [links, setLinks] = useState<any[]>([])
   const { data: sessionData } = useSession()
-  const { userData, setUserData } = useProfileContext()
-  
+  const { userData, setUserData, themeData, setThemeData } = useProfileContext()
+
   api.user.getByUsername.useQuery({ username }, {
     onSuccess: (data) => {
       setUserData(data)
@@ -34,12 +34,20 @@ const UsernamePage = ({ username }: Props) => {
   });
 
   const isOwner = sessionData && sessionData.userId === userData?.id
-  
+
   api.link.getLinksByUserId.useQuery({
     userId: userData?.id || ''
   }, {
     onSuccess: (links) => {
       setLinks(links)
+    }
+  });
+
+  api.theme.getThemeByUserId.useQuery({
+    userId: userData?.id || ''
+  }, {
+    onSuccess: (theme) => {
+      setThemeData(theme)
     }
   });
 
@@ -51,7 +59,7 @@ const UsernamePage = ({ username }: Props) => {
       <Head>
         <title>{userData.displayName} - SWAG.id</title>
       </Head>
-      <div>
+      <div style={{ backgroundColor: themeData?.bodyBackgroundColor || '#ffffff' }}>
         {isOwner &&
           <UserTopBar />
         }
@@ -60,7 +68,7 @@ const UsernamePage = ({ username }: Props) => {
 
           {links && <UserLinks links={links} setLinks={setLinks} isOwner={isOwner} />}
 
-          <div className="text-center opacity-40">
+          <div className="text-center opacity-40" style={{ color: themeData?.bodyTextColor }}>
             <Link href="/" className="font-bold">SWAG<span className="opacity-60">.id</span></Link>
           </div>
         </div>

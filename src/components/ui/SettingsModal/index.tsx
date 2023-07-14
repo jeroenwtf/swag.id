@@ -2,6 +2,7 @@ import { Tab } from '@headlessui/react'
 import Modal from "@/components/ds/Modal";
 
 import ProfileTab from './profileTab';
+import ThemeTab from './themeTab'
 import AccountTab from './accountTab';
 
 import clsx from 'clsx';
@@ -28,9 +29,9 @@ export default function SettingsModal() {
               Your profile
               <div className={sidebarTabHint}>Avatar, name, bio and url</div>
             </Tab>
-            <Tab className={sidebarTab} disabled>
+            <Tab className={sidebarTab}>
               Theme customization
-              <div className={sidebarTabHint}>Coming soon</div>
+              <div className={sidebarTabHint}>Colors, font</div>
             </Tab>
             <Tab className={sidebarTab} disabled>
               Social networks
@@ -45,7 +46,9 @@ export default function SettingsModal() {
             <Tab.Panel className={panelClasses}>
               <ProfileTab />
             </Tab.Panel>
-            <Tab.Panel className={panelClasses}>Content 2</Tab.Panel>
+            <Tab.Panel className={panelClasses}>
+              <ThemeTab />
+            </Tab.Panel>
             <Tab.Panel className={panelClasses}>Content 3</Tab.Panel>
             <Tab.Panel className={panelClasses}>
               <AccountTab />

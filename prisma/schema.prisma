@@ -61,6 +61,7 @@ model User {
     image                     String?
     bio                       String?
     links                     Link[]
+    theme                     Theme?
     accounts                  Account[]
     sessions                  Session[]
 }
@@ -80,4 +81,14 @@ model Link {
   href     String
   position Int
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Theme {
+  id                  String @id @default(cuid())
+  userId              String @unique
+  bodyTextColor       String
+  bodyBackgroundColor String
+  linkTextColor       String
+  linkBackgroundColor String
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

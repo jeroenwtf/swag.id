@@ -12,8 +12,10 @@ import { useState } from "react"
 import { api } from "@/utils/api"
 import { toast } from "react-hot-toast"
 import { supportsTouchEvents } from "detect-it"
+import { useProfileContext } from "@/store/profile-context"
 
 export default function UserLinks({ links, setLinks, isOwner }) {
+  const { themeData } = useProfileContext()
   const [addLinkModalIsShown, setAddLinkModalIsShown] = useState(false)
   const [editLinkModalIsShown, setEditLinkModalIsShown] = useState(false)
   const [editLinkId, setEditLinkId] = useState()
@@ -34,7 +36,7 @@ export default function UserLinks({ links, setLinks, isOwner }) {
     },
   })
 
-  const addLinkButtonClass = clsx('flex gap-2 justify-center items-center cursor-pointer rounded-md text-gray-400 border-2 border-dotted border-gray-300 px-4 py-3')
+  const addLinkButtonClass = clsx('flex gap-2 justify-center items-center cursor-pointer rounded-md text-gray-700 border-2 border-dotted border-gray-700 opacity-40 px-4 py-3')
   const linkClass = clsx('block rounded-md px-4 py-4 relative text-center bg-gray-200')
   const linkButtonClasses = 'absolute top-3 bg-black/70 text-white cursor-pointer px-2.5 py-1.5 rounded text-sm'
   const noHoverButtonClasses = !supportsTouchEvents && 'opacity-60 hover:opacity-100 hidden group-hover:block'
@@ -79,11 +81,18 @@ export default function UserLinks({ links, setLinks, isOwner }) {
       <div className="flex flex-col w-full max-w-md gap-3">
         {isOwner &&
           <>
-            <div className={addLinkButtonClass} onClick={() => setAddLinkModalIsShown(true)}>
+            <div
+              className={addLinkButtonClass}
+              onClick={() => setAddLinkModalIsShown(true)}
+              style={{
+                color: themeData?.bodyTextColor,
+                borderColor: themeData?.bodyTextColor,
+              }}
+            >
               <FontAwesomeIcon icon={faPlus} className="w-4 h-4" />
               <span>Add a new link</span>
             </div>
-            <AddLinkModal links={links} setLinks={setLinks} modalIsShown={addLinkModalIsShown} setModalIsShown={setAddLinkModalIsShown}/>
+            <AddLinkModal links={links} setLinks={setLinks} modalIsShown={addLinkModalIsShown} setModalIsShown={setAddLinkModalIsShown} />
           </>
         }
 
@@ -100,14 +109,21 @@ export default function UserLinks({ links, setLinks, isOwner }) {
         }
         {links.map(link => (
           <div key={link.id} className="relative group transition-opacity">
-            <Link className={linkClass} href={link.href}>
+            <Link
+              className={linkClass}
+              href={link.href}
+              style={{
+                color: themeData?.linkTextColor || '#000000',
+                backgroundColor: themeData?.linkBackgroundColor || '#dcdcdc',
+              }}
+            >
               {link.text}
             </Link>
             {isOwner && <div className={editButtonClasses} onClick={(event) => handleEditButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faPencil} /></div>}
             {isOwner && <div className={deleteButtonClasses} onClick={(event) => handleDeleteButtonClick(link.id, event.currentTarget)}><FontAwesomeIcon icon={faTrashAlt} /></div>}
           </div>
         ))}
-        </div>
-      </>
+      </div>
+    </>
   )
 }
